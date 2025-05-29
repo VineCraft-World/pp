@@ -1,8 +1,8 @@
-name: Gg
+name: Pp
 version: ${version}${build.number}
-main: world.bentobox.gg.GgAddon
+main: world.vinecraft.pp.PpAddon
 icon: GOLD_BLOCK
 api-version: 3.3.3
 
 authors: [tastybento]
-description: Encourages positive chat
+description: Prayer plugin

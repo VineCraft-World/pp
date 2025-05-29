@@ -1,12 +1,18 @@
 # gg config file {$version}
 # How often (in seconds) we poll ChatGPT for new challenge completions
-poll-interval: 60
+poll-interval: 30
 
 # How many of the most recent chat messages to send
 window-size: 100
 
 # Your OpenAI API key
 openai-api-key: your-secret-key-here
+
+# Main prompt
+prompt: "You are a Minecraft server assistant. Respond only in JSON format. The JSON must contain an array called 'triggered_challenges'. Each element in the array must be an object with the following fields: 'id' (the challenge ID) and 'player' (the player name)."
+
+# Chat distance. If players are not within this many blocks, then no one will hear their chat. They will need to use @all or @everyone to send
+chat-distance: 10
 
 # Define each challenge:
 #  id: unique string

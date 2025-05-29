@@ -5,11 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>world.bentobox</groupId>
-    <artifactId>level</artifactId>
+    <artifactId>pp</artifactId>
     <version>${revision}</version>
 
-    <name>Gg</name>
-    <description>gg is an add-on for BentoBox, an expandable Minecraft Bukkit plugin for island-type games like SkyBlock or AcidIsland.</description>
+    <name>Pp</name>
+    <description>pp is an add-on for BentoBox, an expandable Minecraft Bukkit plugin for island-type games like SkyBlock or AcidIsland.</description>
     <url>https://github.com/BentoBoxWorld/gg</url>
     <inceptionYear>2025</inceptionYear>
 
@@ -60,8 +60,6 @@
         <warps.version>1.12.0</warps.version>
         <!-- Visit addon version -->
         <visit.version>1.6.0</visit.version>
-        <!-- Panel Utils version -->
-        <panelutils.version>1.1.0</panelutils.version>
         <!-- Revision variable removes warning about dynamic version -->
         <revision>${build.version}-SNAPSHOT</revision>
         <!-- Do not change unless you want different name for local builds. -->
@@ -143,26 +141,6 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
-        <!--Wild Stacker repo -->
-        <repository>
-            <id>bg-repo</id>
-            <url>https://repo.bg-software.com/repository/api/</url>
-        </repository>
-        <!-- RoseStacker repo -->
-        <repository>
-            <id>rosewood-repo</id>
-            <url>https://repo.rosewooddev.io/repository/public/</url>
-        </repository>
-        <!-- UltimateStacker repo -->
-        <repository>
-            <id>songoda-plugins</id>
-            <url>https://repo.songoda.com/repository/minecraft-plugins/</url>
-        </repository>
-        <!-- ItemsAdder API repo-->
-        <repository>
-            <id>matteodev</id>
-            <url>https://maven.devs.beer/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -204,24 +182,6 @@
             <version>${warps.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>world.bentobox</groupId>
-            <artifactId>visit</artifactId>
-            <version>${visit.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>lv.id.bonne</groupId>
-            <artifactId>panelutils</artifactId>
-            <version>${panelutils.version}</version>
-        </dependency>
-        <!-- Wild Stacker dependency -->
-        <dependency>
-            <groupId>com.bgsoftware</groupId>
-            <artifactId>WildStackerAPI</artifactId>
-            <version>2023.3</version>
-            <scope>provided</scope>
-        </dependency>
         <!-- Static analysis -->
         <!-- We are using Eclipse's annotations. If you're using IDEA, update 
             your project settings to take these into account for in real time static 
@@ -230,32 +190,6 @@
             <groupId>org.eclipse.jdt</groupId>
             <artifactId>org.eclipse.jdt.annotation</artifactId>
             <version>2.2.600</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.DeadSilenceIV</groupId>
-            <artifactId>AdvancedChestsAPI</artifactId>
-            <version>2.9-BETA</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>dev.rosewood</groupId>
-            <artifactId>rosestacker</artifactId>
-            <version>1.5.27</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- Ultimate Stacker dependency -->
-        <dependency>
-            <groupId>com.craftaro</groupId>
-            <artifactId>UltimateStacker-API</artifactId>
-            <version>1.0.0-20240329.173606-35</version>
-            <scope>provided</scope>
-        </dependency>
-       <!-- ItemsAdder -->
-        <dependency>
-            <groupId>dev.lone</groupId>
-            <artifactId>api-itemsadder</artifactId>
-            <version>4.0.2-beta-release-11</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 

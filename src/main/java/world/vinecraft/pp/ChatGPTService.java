@@ -1,10 +1,10 @@
-package world.bentobox.gg;
+package world.vinecraft.pp;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,11 +18,14 @@ import org.json.simple.parser.JSONParser;
 public class ChatGPTService {
     private static final String URL = "https://api.openai.com/v1/chat/completions";
     private final String apiKey;
-    private final GgAddon addon;
+    private final PpAddon addon;
+    private final String mainPrompt;
 
-    public ChatGPTService(GgAddon addon, String apiKey) { 
+    public ChatGPTService(PpAddon addon, String apiKey) { 
         this.apiKey = apiKey; 
         this.addon = addon;
+        this.mainPrompt = addon.getConfig().getString("main-prompt",
+                "You are a Minecraft server assistant. Respond only in JSON format. The JSON must contain an array called 'triggered_challenges'. Each element in the array must be an object with the following fields: 'id' (the challenge ID) and 'player' (the player name).");
     }
 
     /**
@@ -40,7 +43,7 @@ public class ChatGPTService {
 
             JSONObject systemMessage = new JSONObject();
             systemMessage.put("role", "system");
-            systemMessage.put("content", "You are a Minecraft server assistant. Respond only in JSON format. The JSON must contain an array called 'triggered_challenges'. Each element in the array must be an object with the following fields: 'id' (the challenge ID) and 'player' (the player name).");
+            systemMessage.put("content", mainPrompt);
             messages.add(systemMessage);
 
             JSONObject userMessage = new JSONObject();
@@ -55,7 +58,7 @@ public class ChatGPTService {
             String sanitizedApiKey = apiKey != null ? apiKey.replace("“", "").replace("”", "").trim() : "";
 
             // Open connection
-            HttpURLConnection connection = (HttpURLConnection) new URL(URL).openConnection();
+            HttpURLConnection connection = (HttpURLConnection) new URI(URL).toURL().openConnection();
             connection.setRequestMethod("POST");
 
             // Use the sanitized API key
