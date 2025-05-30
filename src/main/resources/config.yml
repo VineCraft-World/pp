@@ -9,7 +9,7 @@ window-size: 100
 openai-api-key: your-secret-key-here
 
 # Main prompt
-prompt: "You are a Minecraft server assistant. Respond only in JSON format. The JSON must contain an array called 'triggered_challenges'. Each element in the array must be an object with the following fields: 'id' (the challenge ID) and 'player' (the player name)."
+prompt: "You are a Minecraft server assistant who is reacting to prayers submitted by players. Respond only in JSON format. The JSON must contain an array called 'triggered_challenges'. Each element in the array must be an object with the following fields: 'id' (the challenge ID), 'player' (the affected player name), 'reward' (the enum name of a Bukkit Material that may be given as a reward), 'qty' the quantity of reward to give"
 
 # Chat distance. If players are not within this many blocks, then no one will hear their chat. They will need to use @all or @everyone to send
 chat-distance: 10
@@ -19,56 +19,29 @@ chat-distance: 10
 #  prompt: the check you want ChatGPT to run on the chat window
 #  commands: list of Bukkit commands to run; use %player% to insert the winner’s name
 challenges:
-  greet:
-    prompt: "detect when a player sends a greeting in any language"
+  guidance1:
+    prompt: "detect when a player is praying for guidance or help"
     commands:
-      - "give %player% diamond 1"
-      - "msg %player% Thanks for saying hi!"
-  goodbye:
-    prompt: "detect when a player says goodbye in any language"
-    commands:
-      - "give %player% emerald 1"
-      - "msg %player% Thanks for saying goodbye!"
-  help:
-    prompt: "detect when a player asks for help in any language"
-    commands:
-      - "give %player% diamond 1"
-      - "msg %player% Thanks for asking for help!"
-  welcome:
-    prompt: "detect when a player welcomes another player in any language"
-    commands:
-      - "give %player% diamond 1"
-      - "msg %player% Thanks for welcoming others!"
-  congrats:
-    prompt: "detect when a player congratulates another player in any language"
-    commands:
-      - "give %player% diamond 1"
-      - "msg %player% Thanks for congratulating others!"
-  goodluck: 
-    prompt: "detect when a player wishes another player good luck in any language"
-    commands:
-      - "give %player% emerald 1"
-      - "msg %player% Thanks for wishing others good luck!"
-  goodgame:
-    prompt: "detect when a player says 'gg' or 'good game' in any language"
-    commands:
-      - "give %player% oak_sign 1"
-      - "msg %player% Thanks for saying good game!"
-  goodjob:  
-    prompt: "detect when a player says 'good job' in any language"
-    commands:
-      - "give %player% diampaperond 1"
-      - "msg %player% Thanks for saying good job!"
-  thanks:
-    prompt: "detect when a player says 'thanks' in any language"
-    commands:
-      - "eco give %player% 50"
-  warpinvite:
-    prompt: "detect when a player invites others to warp to their island"
-    commands:
-      - "msg %player% Congrats on inviting others to your island!"
-  question:
-    prompt: "detect that a player has asked a question to get help from the community"
-    commands:
-      - "msg %player% Good job asking the community. If you get an answer, don't forget to say thanks!"
-# …add as many as you like
+      - execute at %player% run playsound minecraft:entity.experience_orb.pickup player %player%
+      - 'tellraw %player% [{"text":"%guidance%","bold":true,"color":"dark_green","click_event":{"action":"open_url","url":"https://www.biblegateway.com/passage/?search=%encoded-guidance%&version=NIV"}}]'
+  healing:
+     prompt: "detect when a player is praying for healing for themselves or another player"
+     commands:
+          - "heal %player%"
+          - "give %player% %reward% %qty%"
+          - execute at %player% run playsound minecraft:block.enchantment_table.use player %player%
+  provision:
+      prompt: "detect when a player is praying for some provision or item and give the item as a reward. The reward must be in the form of a Bukkit Material and quantity."
+      commands:
+          - "give %player% %reward% %qty%"
+          - execute at %player% run playsound minecraft:ui.toast.challenge_complete player %player%
+
+guidance:
+  - "Luke 15:4"
+  - "Matthew 18:12"
+  - "Matthew 18:13"
+  - "John 10:11"
+  - "Psalm 23:1"
+  - "Isaiah 40:11"
+  - "Psalm 119:105"
+  - "John 14:6"

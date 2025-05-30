@@ -10,10 +10,13 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import world.bentobox.bentobox.BentoBox;
 
 public class ChatGPTService {
     private static final String URL = "https://api.openai.com/v1/chat/completions";
@@ -24,8 +27,8 @@ public class ChatGPTService {
     public ChatGPTService(PpAddon addon, String apiKey) { 
         this.apiKey = apiKey; 
         this.addon = addon;
-        this.mainPrompt = addon.getConfig().getString("main-prompt",
-                "You are a Minecraft server assistant. Respond only in JSON format. The JSON must contain an array called 'triggered_challenges'. Each element in the array must be an object with the following fields: 'id' (the challenge ID) and 'player' (the player name).");
+        this.mainPrompt = addon.getConfig().getString("prompt",
+                "You are a Minecraft server assistant who is reacting to prayers submitted by players. Respond only in JSON format. The JSON must contain an array called 'triggered_challenges'. Each element in the array must be an object with the following fields: 'id' (the challenge ID), 'player' (the affected player name), 'reward' (the enum name of a Bukkit Material that may be given as a reward), 'qty' the quantity of reward to give.");
     }
 
     /**
@@ -33,7 +36,7 @@ public class ChatGPTService {
      * expects JSON: { "<challengeId>": ["PlayerA","PlayerB"], ... }
      */
     @SuppressWarnings("unchecked")
-    public Map<String, List<String>> evaluateChallenges(Map<String, Object> payload) {
+    public Map<String, List<Winner>> evaluateChallenges(Map<String, Object> payload) {
         try {
             // Construct the JSON payload
             JSONObject requestBody = new JSONObject();
@@ -133,20 +136,28 @@ public class ChatGPTService {
             return Collections.emptyMap();
         }
     }
+    
+    public record Winner(String playerName, String reward, Long qty) {
+    }
 
-    private Map<String, List<String>> processTriggeredChallenges(JSONArray triggeredChallenges) {
-        Map<String, List<String>> result = new HashMap<>();
+    private Map<String, List<Winner>> processTriggeredChallenges(JSONArray triggeredChallenges) {
+        BentoBox.getInstance().logDebug(triggeredChallenges);
+        Map<String, List<Winner>> result = new HashMap<>();
 
         for (Object challengeObj : triggeredChallenges) {
             JSONObject challenge = (JSONObject) challengeObj;
-            String challengeId = (String) challenge.get("id");
-            String player = (String) challenge.get("player");
+            String challengeId = (String) Objects.requireNonNullElse(challenge.get("id"), "");
+            String player = (String) Objects.requireNonNullElse(challenge.get("player"), "");
+            String reward = (String) Objects.requireNonNullElse(challenge.get("reward"), "");
+            Long qty = (Long) Objects.requireNonNullElse(challenge.get("qty"), 0);
+            Winner winner = new Winner(player, reward, qty);
 
             // Log challenge details for debugging
-            addon.log("Triggered Challenge ID: " + challengeId + ", Player: " + player);
+            addon.log("Triggered Challenge ID: " + challengeId + ", Affected Player: " + player + " Reward: " + reward
+                    + " qty: " + qty);
 
             // Add challenge ID and player to the result map
-            result.compute(challengeId, (k, v) -> v == null ? new ArrayList<>() : v).add(player);
+            result.compute(challengeId, (k, v) -> v == null ? new ArrayList<>() : v).add(winner);
         }
 
         return result;
