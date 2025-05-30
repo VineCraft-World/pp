@@ -76,7 +76,7 @@ public class PrayCommand extends CompositeCommand implements Listener {
 
     @Override
     public void setup() {
-        this.setPermission("pp.pray");
+        this.setPermission("pray");
         this.setOnlyPlayer(true);
         this.setParametersHelp("pp.help.parameters");
         this.setDescription("pp.help.description");

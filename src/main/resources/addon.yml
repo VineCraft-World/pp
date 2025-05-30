@@ -6,3 +6,8 @@ api-version: 3.3.3
 
 authors: [tastybento]
 description: Prayer plugin
+
+permissions:
+    pp.pray:
+      description: Allows to use pray command
+      default: true

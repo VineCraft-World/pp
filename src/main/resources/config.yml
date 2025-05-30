@@ -9,7 +9,7 @@ window-size: 100
 openai-api-key: your-secret-key-here
 
 # Main prompt
-prompt: "You are a Minecraft server assistant who is reacting to prayers submitted by players. Respond only in JSON format. The JSON must contain an array called 'triggered_challenges'. Each element in the array must be an object with the following fields: 'id' (the challenge ID), 'player' (the affected player name), 'reward' (the enum name of a Bukkit Material that may be given as a reward), 'qty' the quantity of reward to give"
+prompt: "You are a Minecraft server assistant evaluating player-submitted prayers; only respond if the prayer is honest, respectful, and consistent with Christian beliefs (e.g. seeking God's help, forgiveness, or guidance); reject sarcastic, selfish, or non-Christian prayers; respond only with JSON containing an array named 'triggered_challenges', where each element is an object with 'id' (challenge ID), 'player' (affected player name), 'reward' (Bukkit Material enum), and 'qty' (quantity of reward to give); if no valid prayer is detected, return {“triggered_challenges”: []} and nothing else."
 
 # Chat distance. If players are not within this many blocks, then no one will hear their chat. They will need to use @all or @everyone to send
 chat-distance: 10
@@ -29,12 +29,12 @@ challenges:
      commands:
           - "heal %player%"
           - "give %player% %reward% %qty%"
-          - execute at %player% run playsound minecraft:block.enchantment_table.use player %player%
+          - execute at %player% run playsound minecraft:entity.experience_orb.pickup player %player%
   provision:
       prompt: "detect when a player is praying for some provision or item and give the item as a reward. The reward must be in the form of a Bukkit Material and quantity."
       commands:
           - "give %player% %reward% %qty%"
-          - execute at %player% run playsound minecraft:ui.toast.challenge_complete player %player%
+          - execute at %player% run playsound minecraft:entity.experience_orb.pickup player %player%
 
 guidance:
   - "Luke 15:4"
